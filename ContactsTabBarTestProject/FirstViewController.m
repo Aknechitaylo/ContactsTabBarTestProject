@@ -42,7 +42,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *cellID = @"Cell";
-    static NSString *contactImageName = @"photo";
+    NSString *contactImageName = [NSString stringWithFormat:@"%ld", indexPath.row + 1];
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell)

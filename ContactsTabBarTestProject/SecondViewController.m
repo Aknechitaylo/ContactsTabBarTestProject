@@ -40,7 +40,7 @@ static NSString * const reuseIdentifier = @"Cell";
     self.secondViewControllerCollectionView.dataSource = self;
     self.secondViewControllerCollectionView.delegate = self;
     
-    self.collectionViewCellHeight = 70;
+    self.collectionViewCellHeight = 80;
     
     self.contactsArray = @[@"Настя", @"Дима", @"Андрей", @"Катя", @"Машка"];
     
@@ -70,7 +70,7 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *contactImageName = @"photo";
+    NSString *contactImageName = [NSString stringWithFormat:@"%ld", (long)indexPath.row + 1];
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     if (!cell)
@@ -100,6 +100,8 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.selectedRows = [tableView indexPathsForSelectedRows];
+    if (self.selectedRows.count == 0)
+        [self.secondViewControllerCollectionView.collectionViewLayout invalidateLayout];
     [self updateTopCollectionViewWithSelectedRows:self.selectedRows];
 }
 
@@ -114,6 +116,8 @@ static NSString * const reuseIdentifier = @"Cell";
     
     UICollectionViewCell *collectionViewCell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
+    [collectionViewCell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
     if (self.selectedRows.count != 0) {
         UITableViewCell *tableViewCell = [self.secondViewControllerTableView cellForRowAtIndexPath:self.selectedRows[indexPath.row]];
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:collectionViewCell.contentView.frame];
@@ -123,9 +127,6 @@ static NSString * const reuseIdentifier = @"Cell";
     
     return collectionViewCell;
 }
-
-
-#pragma mark - UICollectionViewDataDelegate
 
 
 #pragma mark - UICollectionViewDelegateFlowLayout
