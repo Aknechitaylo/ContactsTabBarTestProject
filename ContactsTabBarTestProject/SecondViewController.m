@@ -10,7 +10,7 @@
 
 
 
-@interface SecondViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
+@interface SecondViewController () <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout>
 
 @property IBOutlet UITableView *secondViewControllerTableView;
 @property (weak, nonatomic) IBOutlet UICollectionView *secondViewControllerCollectionView;
@@ -19,7 +19,13 @@
 @property (strong, nonatomic) NSArray *contactsArray;
 @property (strong, nonatomic) NSArray<NSIndexPath *> *selectedRows;
 
+@property (assign, nonatomic) CGFloat collectionViewCellHeight;
+
 @end
+
+
+
+static NSString * const reuseIdentifier = @"Cell";
 
 
 
@@ -34,8 +40,11 @@
     self.secondViewControllerCollectionView.dataSource = self;
     self.secondViewControllerCollectionView.delegate = self;
     
+    self.collectionViewCellHeight = 70;
+    
     self.contactsArray = @[@"Настя", @"Дима", @"Андрей", @"Катя", @"Машка"];
     
+    [self.secondViewControllerCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
     self.collectionViewHeightConstraint.constant = 0;
     
     [self.secondViewControllerTableView setEditing:YES];
@@ -43,7 +52,7 @@
 
 - (void)updateTopCollectionViewWithSelectedRows:(NSArray<NSIndexPath *> *)selectedRows {
     
-    self.collectionViewHeightConstraint.constant = selectedRows.count == 0 ? 0 : 50;
+    self.collectionViewHeightConstraint.constant = selectedRows.count == 0 ? 0 : self.collectionViewCellHeight;
     
     [UIView animateWithDuration:0.5f animations:^{
         [self.view layoutIfNeeded];
@@ -61,12 +70,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *tableViewCellID = @"tableViewCellID";
     static NSString *contactImageName = @"photo";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:tableViewCellID];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     if (!cell)
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:tableViewCellID];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     
     cell.textLabel.text = self.contactsArray[indexPath.row];
     cell.imageView.image = [UIImage imageNamed:contactImageName];
@@ -104,17 +112,26 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *collectionViewCellID = @"collectionViewCellID";
+    UICollectionViewCell *collectionViewCell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:collectionViewCellID forIndexPath:indexPath];
+    if (self.selectedRows.count != 0) {
+        UITableViewCell *tableViewCell = [self.secondViewControllerTableView cellForRowAtIndexPath:self.selectedRows[indexPath.row]];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:collectionViewCell.contentView.frame];
+        imageView.image = tableViewCell.imageView.image;
+        [collectionViewCell.contentView addSubview:imageView];
+    }
     
-    
-    
-    return cell;
+    return collectionViewCell;
 }
 
 
 #pragma mark - UICollectionViewDataDelegate
 
+
+#pragma mark - UICollectionViewDelegateFlowLayout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(self.collectionViewCellHeight, self.collectionViewCellHeight);
+}
 
 @end
