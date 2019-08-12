@@ -54,7 +54,7 @@ static NSString * const reuseIdentifier = @"Cell";
     
     self.collectionViewHeightConstraint.constant = selectedRows.count == 0 ? 0 : self.collectionViewCellHeight;
     
-    [UIView animateWithDuration:0.5f animations:^{
+    [UIView animateWithDuration:0.3f animations:^{
         [self.view layoutIfNeeded];
     }];
     
