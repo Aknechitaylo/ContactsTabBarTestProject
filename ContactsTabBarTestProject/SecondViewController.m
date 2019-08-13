@@ -7,6 +7,8 @@
 //
 
 #import "SecondViewController.h"
+#import "FirstViewController.h"
+#import "FirstViewControllerTableViewCell.h"
 
 
 
@@ -42,7 +44,8 @@ static NSString * const reuseIdentifier = @"Cell";
     
     self.collectionViewCellHeight = 80;
     
-    self.contactsArray = @[@"Настя", @"Дима", @"Андрей", @"Катя", @"Машка"];
+    FirstViewController *firstVC = self.tabBarController.viewControllers[0];
+    self.contactsArray = firstVC.contactsArray;
     
     [self.secondViewControllerCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
     self.collectionViewHeightConstraint.constant = 0;
@@ -52,13 +55,16 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void)updateTopCollectionViewWithSelectedRows:(NSArray<NSIndexPath *> *)selectedRows {
     
-    self.collectionViewHeightConstraint.constant = selectedRows.count == 0 ? 0 : self.collectionViewCellHeight;
+    self.collectionViewHeightConstraint.constant = selectedRows.count == 0 ?: self.collectionViewCellHeight;
     
     [UIView animateWithDuration:0.3f animations:^{
         [self.view layoutIfNeeded];
     }];
     
     [self.secondViewControllerCollectionView reloadData];
+    
+    NSIndexPath *lastItemIndexPath = [NSIndexPath indexPathForItem:self.selectedRows.count - 1 inSection:0];
+    [self.secondViewControllerCollectionView scrollToItemAtIndexPath:lastItemIndexPath atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
 }
 
 
@@ -70,14 +76,14 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSString *contactImageName = [NSString stringWithFormat:@"%ld", (long)indexPath.row + 1];
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
+    FirstViewControllerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
     if (!cell)
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+        cell = [[FirstViewControllerTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
     
-    cell.textLabel.text = self.contactsArray[indexPath.row];
-    cell.imageView.image = [UIImage imageNamed:contactImageName];
+    CNContact *contact = self.contactsArray[indexPath.row];
+    
+    cell.contactText = [NSString stringWithFormat:@"%@ %@", contact.givenName, contact.familyName];
+    cell.contactImage = [UIImage imageWithData:contact.thumbnailImageData];
     
     return cell;
 }
@@ -119,9 +125,15 @@ static NSString * const reuseIdentifier = @"Cell";
     [collectionViewCell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
     if (self.selectedRows.count != 0) {
-        UITableViewCell *tableViewCell = [self.secondViewControllerTableView cellForRowAtIndexPath:self.selectedRows[indexPath.row]];
+        NSIndexPath *selectedRowIndexPath = self.selectedRows[indexPath.row];
+        CNContact *contact = self.contactsArray[selectedRowIndexPath.row];
+        
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:collectionViewCell.contentView.frame];
-        imageView.image = tableViewCell.imageView.image;
+        imageView.layer.cornerRadius = imageView.frame.size.width/2;
+        imageView.clipsToBounds = YES;
+        
+        UIImage *contactThumbnail = [UIImage imageWithData:contact.thumbnailImageData];
+        imageView.image = contactThumbnail ?: [UIImage imageNamed:@"contacts"];
         [collectionViewCell.contentView addSubview:imageView];
     }
     

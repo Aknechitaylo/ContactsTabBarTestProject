@@ -17,7 +17,6 @@
 @property IBOutlet UITableView *firstViewControllerTableView;
 
 @property (strong, nonatomic) CNContactPickerViewController *contactPickerViewController;
-@property (strong, nonatomic) NSMutableArray *contactsArray;
 
 @property (assign, nonatomic) NSUInteger heightForRow;
 

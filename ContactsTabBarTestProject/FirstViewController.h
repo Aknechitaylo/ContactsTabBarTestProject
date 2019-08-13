@@ -13,5 +13,7 @@
 
 @interface FirstViewController : UIViewController
 
+@property (strong, nonatomic) NSMutableArray *contactsArray;
+
 @end
 

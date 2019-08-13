@@ -31,11 +31,15 @@
 }
 
 - (void)setContactText:(NSString *)contactText {
+    _contactText = contactText;
+    
     self.contactLabel.text = contactText;
 }
 
 - (void)setContactImage:(UIImage *)contactImage {
-    self.contactImageView.image = contactImage ? contactImage : [UIImage imageNamed:@"contacts"];
+    _contactImage = contactImage ?: [UIImage imageNamed:@"contacts"];
+    
+    self.contactImageView.image = _contactImage;
     
     self.contactImageView.layer.cornerRadius = self.contactImageView.frame.size.width/2;
     self.contactImageView.clipsToBounds = YES;
