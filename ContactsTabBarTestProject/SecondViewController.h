@@ -12,6 +12,5 @@
 
 @interface SecondViewController : UIViewController
 
-
 @end
 

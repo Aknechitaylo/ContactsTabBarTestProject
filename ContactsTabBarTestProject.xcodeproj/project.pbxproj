@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FFCD99832301D1DD00052688 /* FirstViewControllerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FFCD99822301D1DD00052688 /* FirstViewControllerTableViewCell.m */; };
 		FFF6C7C422FC7B0800DB7E29 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF6C7C322FC7B0800DB7E29 /* AppDelegate.m */; };
 		FFF6C7C722FC7B0800DB7E29 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF6C7C622FC7B0800DB7E29 /* FirstViewController.m */; };
 		FFF6C7CA22FC7B0800DB7E29 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FFF6C7C922FC7B0800DB7E29 /* SecondViewController.m */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FFCD99812301D1DD00052688 /* FirstViewControllerTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstViewControllerTableViewCell.h; sourceTree = "<group>"; };
+		FFCD99822301D1DD00052688 /* FirstViewControllerTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewControllerTableViewCell.m; sourceTree = "<group>"; };
 		FFF6C7BF22FC7B0800DB7E29 /* ContactsTabBarTestProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContactsTabBarTestProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFF6C7C222FC7B0800DB7E29 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		FFF6C7C322FC7B0800DB7E29 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -65,6 +68,8 @@
 				FFF6C7C322FC7B0800DB7E29 /* AppDelegate.m */,
 				FFF6C7C522FC7B0800DB7E29 /* FirstViewController.h */,
 				FFF6C7C622FC7B0800DB7E29 /* FirstViewController.m */,
+				FFCD99812301D1DD00052688 /* FirstViewControllerTableViewCell.h */,
+				FFCD99822301D1DD00052688 /* FirstViewControllerTableViewCell.m */,
 				FFF6C7C822FC7B0800DB7E29 /* SecondViewController.h */,
 				FFF6C7C922FC7B0800DB7E29 /* SecondViewController.m */,
 				FFF6C7CB22FC7B0800DB7E29 /* Main.storyboard */,
@@ -150,6 +155,7 @@
 				FFF6C7C422FC7B0800DB7E29 /* AppDelegate.m in Sources */,
 				FFF6C7D522FC7B0B00DB7E29 /* main.m in Sources */,
 				FFF6C7C722FC7B0800DB7E29 /* FirstViewController.m in Sources */,
+				FFCD99832301D1DD00052688 /* FirstViewControllerTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
