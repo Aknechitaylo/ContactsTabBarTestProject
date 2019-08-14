@@ -42,7 +42,7 @@ static NSString * const reuseIdentifier = @"Cell";
     self.secondViewControllerCollectionView.dataSource = self;
     self.secondViewControllerCollectionView.delegate = self;
     
-    self.collectionViewCellHeight = 80;
+    self.collectionViewCellHeight = 70;
     
     FirstViewController *firstVC = self.tabBarController.viewControllers[0];
     self.contactsArray = firstVC.contactsArray;
