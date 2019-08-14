@@ -14,6 +14,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *contactLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *contactImageView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageViewLeadingConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *separatorViewWidthConstraint;
 
 @end
 
@@ -22,6 +24,11 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+}
+
+- (void)updateConstraints {
+    [super updateConstraints];
+    self.separatorViewWidthConstraint.constant = self.frame.size.width - 16;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -43,6 +50,11 @@
     
     self.contactImageView.layer.cornerRadius = self.contactImageView.frame.size.width/2;
     self.contactImageView.clipsToBounds = YES;
+}
+
+- (void)setImageViewLeadingConstraintConstant:(CGFloat)imageViewLeadingConstraintConstant {
+    self.imageViewLeadingConstraint.constant = imageViewLeadingConstraintConstant;
+    [self layoutIfNeeded];
 }
 
 @end

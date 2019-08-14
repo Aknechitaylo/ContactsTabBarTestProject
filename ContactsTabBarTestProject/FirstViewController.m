@@ -19,6 +19,7 @@
 @property (strong, nonatomic) CNContactPickerViewController *contactPickerViewController;
 
 @property (assign, nonatomic) NSUInteger heightForRow;
+@property (assign, nonatomic) BOOL animateCells;
 
 @end
 
@@ -32,11 +33,11 @@
     
     self.searchBar.delegate = self;
     
-    self.firstViewControllerTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
     self.contactsArray = [NSMutableArray array];
-    
+    [self getListOfAllContactsOfUser];
+
     self.heightForRow = 60;
+    self.animateCells = YES;
 }
 
 - (void)getListOfAllContactsOfUser {
@@ -52,24 +53,58 @@
                 else
                     [self.contactsArray addObject:contact];
             }];
-        }
+        } else
+            [self askUserToGruntContactsAccess];
     }];
+
+}
+
+- (void)askUserToGruntContactsAccess {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Для использования приложения, пожалуйста, предоставьте доступ к вашим контактам" message:@"Разрешите доступ в настройках" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }];
+    
+    [alertController addAction:okAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 
 #pragma mark - UITextFieldDelegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    // выполняется один раз
-    
-    [self getListOfAllContactsOfUser];
+    if (self.contactsArray.count == 0) {
+        [self getListOfAllContactsOfUser];
+    }
     
     self.firstViewControllerTableView.dataSource = self;
     self.firstViewControllerTableView.delegate = self;
     [self.firstViewControllerTableView reloadData];
-    self.firstViewControllerTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+}
 
-    self.searchBar.delegate = nil;
+- (void)animateCell:(FirstViewControllerTableViewCell *)cell {
+    // анимация ячеек таблицы
+    CGFloat cellWidth, firstXCoordinate, secondXCoordinate, finalXCoordinate;
+    cellWidth = cell.frame.size.width;
+    firstXCoordinate = -cellWidth;
+    secondXCoordinate = 24;
+    finalXCoordinate = 8;
+    
+    cell.imageViewLeadingConstraintConstant = firstXCoordinate;
+    
+    static NSTimeInterval delay = 0.1f;
+    delay = delay + 0.05f;
+    
+    [UIView animateWithDuration:0.25f delay:delay options:UIViewAnimationOptionCurveEaseOut animations:^{
+        cell.imageViewLeadingConstraintConstant = secondXCoordinate;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.1f animations:^{
+            cell.imageViewLeadingConstraintConstant = finalXCoordinate;
+            self.animateCells = NO;
+        }];
+    }];
 }
 
 
@@ -100,6 +135,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return self.heightForRow;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (self.animateCells)
+        [self animateCell:(FirstViewControllerTableViewCell *)cell];
 }
 
 @end

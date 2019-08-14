@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *contactText;
 @property (strong, nonatomic) UIImage *contactImage;
 
+@property (assign, nonatomic) CGFloat imageViewLeadingConstraintConstant;
+
 @end
 
 NS_ASSUME_NONNULL_END
